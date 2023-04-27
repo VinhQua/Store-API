@@ -1,6 +1,6 @@
 const Product = require('../models/product')
 const getAllProducts = async (req, res, next) =>{
-    const {name,featured,company,sort} = req.query
+    const {name,featured,company,sort,fields,numericFilters} = req.query
     const queryObject = {}
     if (featured){
         queryObject.featured = featured ==="true" ? true : false;
@@ -11,6 +11,27 @@ const getAllProducts = async (req, res, next) =>{
     if (name){
         queryObject.name = {$regex: name, $options: 'i'}
     }
+    if (numericFilters){
+        const operatorMap ={
+            '>':'$gt',
+            '>=':'$gte',
+            '=':'$eq',
+            '<':'$lt',
+            '<=':'$ltq',
+        }
+        const regEx = /\b(<|<=|=|>|>=)\b/g
+        let filters = numericFilters.replace(regEx,(match)=>`-${operatorMap[match]}-`)
+        // console.log(filters)
+        const options = ['price', 'rating']
+        filters = filters.split(',').forEach(item=>{
+            const [field,operator,value] = item.split('-');
+            if (options.includes(field)){
+                queryObject[field] = {[operator]:Number(value)}
+            }
+            
+        })
+    }
+    console.log(queryObject)
     let products =  Product.find(queryObject);
     if (sort){
         const sortList = sort.split(',').join(' ');
@@ -18,8 +39,19 @@ const getAllProducts = async (req, res, next) =>{
     }else{
         products.sort('-createdAt')
     }
+
+    if (fields) {
+        const fieldsList = fields.split(',').join(' ');
+        products.select(fieldsList)
+    }
+
+    const limit = Number(req.query.limit) || 10;
+    const page = Number(req.query.page) || 0;
+    products.skip(page*limit).limit(limit)
+
     const result = await products
     res.status(200).json({nbHits:result.length,products:result})
+
 }
 
 const createNewProduct = async (req, res, next) =>{
