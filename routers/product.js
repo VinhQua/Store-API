@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-
-router.route("/").get().post();
-router.route("/:id").get().patch().delete;
+import {getAllProducts,getSingleProduct,createProduct,updateProduct,deleteProduct} from require("../controllers/product")
+router.route("/").get(getAllProducts).post(createProduct);
+router.route("/:id").get(getSingleProduct).patch(updateProduct).delete(deleteProduct);
 
 module.exports = router;
