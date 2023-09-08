@@ -11,7 +11,9 @@ const app = express();
 app.use(express.static("./public"));
 app.use(express.json());
 //routes
-app.get("/"). send(`    <h1>Store <a href="api/v1/products">API</a></h1>`)
+
+app.get("/").send(`    <h1>Store <a href="api/v1/products">API</a></h1>`)
+
 //product routes
 app.use("/api/v1/products", products);
 //not found
