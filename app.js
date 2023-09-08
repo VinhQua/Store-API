@@ -1,5 +1,5 @@
 require("dotenv").config();
-require("express-async-errors")
+require("express-async-errors");
 const errorHandler = require("./middlewares/error-handlers");
 const notFound = require("./middlewares/not-found");
 const express = require("express");
@@ -8,7 +8,8 @@ const connectDB = require("./db/connectDB");
 require("./models/products");
 const app = express();
 //middleware
-app.use(express.json())
+app.use(express.static("./public"));
+app.use(express.json());
 //routes
 
 //product routes

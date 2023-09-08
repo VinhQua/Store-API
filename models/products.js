@@ -12,9 +12,12 @@ const Product = sequelize.define(
           args: true,
         },
       },
+      set(value) {
+        this.setDataValue("name", value.trim());
+      },
     },
     price: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL,
       allowNull: false,
       validate: {
         notEmpty: {
@@ -28,7 +31,7 @@ const Product = sequelize.define(
       defaultValue: false,
     },
     rating: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL,
       defaultValue: 4.5,
     },
     company: {
@@ -46,5 +49,5 @@ const Product = sequelize.define(
 const syncTable = async () => {
   await Product.sync({ alter: true });
 };
-syncTable();
+// syncTable();
 module.exports = Product;
