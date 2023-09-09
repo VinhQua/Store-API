@@ -2,6 +2,7 @@ const Product = require("../models/products");
 const { CustomAPIError } = require("../errors/custom-error");
 const getAllProducts = async (req, res) => {
   const products = await Product.findAll();
+  const ipAddress = req.socket.remoteAddress
   res.status(200).json({ amount: products.length, products });
 };
 
