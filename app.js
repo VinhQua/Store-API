@@ -8,6 +8,7 @@ const connectDB = require("./db/connectDB");
 require("./models/products");
 const app = express();
 //middleware
+app.set("trust proxy",true)
 app.use(express.static("./public"));
 app.use(express.json());
 //routes
