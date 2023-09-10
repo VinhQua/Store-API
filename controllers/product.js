@@ -1,9 +1,16 @@
 const Product = require("../models/products");
 const { CustomAPIError } = require("../errors/custom-error");
+const { Op } = require("sequelize");
 const getAllProducts = async (req, res) => {
-  const products = await Product.findAll({where:req.query});
-  const ipAddress = req.ip
-  res.status(200).json({ipAddress, amount: products.length, products });
+  const { search } = req.query;
+  const queryObject = {};
+  if (search) {
+    queryObject.name = { [Op.iLike]: `%${search}%` };
+  }
+  const products = await Product.findAll({ where: queryObject });
+  const ipAddress = req.ip;
+
+  res.status(200).json({ ipAddress, amount: products.length, products });
 };
 
 const getSingleProduct = async (req, res) => {
