@@ -1,7 +1,7 @@
 const Product = require("../models/products");
 const { CustomAPIError } = require("../errors/custom-error");
 const getAllProducts = async (req, res) => {
-  const products = await Product.findAll();
+  const products = await Product.findAll({where:req.query});
   const ipAddress = req.ip
   res.status(200).json({ipAddress, amount: products.length, products });
 };
