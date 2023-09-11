@@ -28,7 +28,7 @@ const getAllProducts = async (req, res) => {
       ">": Op.gt,
     };
     const regEx = /\b(<|<=|=|>=|>)\b/;
-    console.log(numericFilters);
+
     const options = ["rating", "price"];
     const filters = numericFilters.split(",").map((filter) =>
       filter.replace(regEx, (match) => {
@@ -39,9 +39,8 @@ const getAllProducts = async (req, res) => {
         }
       })
     );
-    console.log(filters);
   }
-  console.log(queryObject);
+
   const limit = req.query.limit || 10;
   const page = req.query.page || 1;
   const products = await Product.findAll({
