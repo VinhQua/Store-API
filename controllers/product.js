@@ -32,7 +32,6 @@ const getAllProducts = async (req, res) => {
     const options = ["rating", "price"];
     const filters = numericFilters.split(",").map((filter) =>
       filter.replace(regEx, (match) => {
-        console.log(match);
         const [field, value] = filter.split(match);
         if (options.includes(field)) {
           queryObject[field] = { [operatorMap[match]]: value };
